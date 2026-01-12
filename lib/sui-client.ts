@@ -1,7 +1,7 @@
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { fromB64 } from '@mysten/sui.js/utils';
+import { fromB64, decodeSuiPrivateKey } from '@mysten/sui.js/utils';
 
 export interface SuiConfig {
   network: 'mainnet' | 'testnet' | 'devnet';
@@ -25,8 +25,10 @@ export class SuiLoyaltyClient {
     // Initialize Keypair from private key
     // Support both formats: suiprivkey and base64
     if (config.privateKey.startsWith('suiprivkey')) {
-      // Parse suiprivkey format
-      this.keypair = Ed25519Keypair.deriveKeypair(config.privateKey);
+      // Parse suiprivkey format - use decodeSuiPrivateKey
+      this.keypair = Ed25519Keypair.fromSecretKey(
+        decodeSuiPrivateKey(config.privateKey).secretKey
+      );
     } else {
       // Legacy base64 format
       const privateKeyBytes = fromB64(config.privateKey);
