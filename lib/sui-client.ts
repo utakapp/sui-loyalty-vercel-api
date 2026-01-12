@@ -23,8 +23,15 @@ export class SuiLoyaltyClient {
     this.client = new SuiClient({ url: rpcUrl });
 
     // Initialize Keypair from private key
-    const privateKeyBytes = fromB64(config.privateKey);
-    this.keypair = Ed25519Keypair.fromSecretKey(privateKeyBytes);
+    // Support both formats: suiprivkey and base64
+    if (config.privateKey.startsWith('suiprivkey')) {
+      // Parse suiprivkey format
+      this.keypair = Ed25519Keypair.deriveKeypair(config.privateKey);
+    } else {
+      // Legacy base64 format
+      const privateKeyBytes = fromB64(config.privateKey);
+      this.keypair = Ed25519Keypair.fromSecretKey(privateKeyBytes);
+    }
 
     this.packageId = config.packageId;
     this.adminCapId = config.adminCapId;
