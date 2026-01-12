@@ -1,12 +1,13 @@
 {
-  "buildCommand": "",
-  "framework": null,
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     },
-    "api/**/*.ts": {
-      "runtime": "nodejs18.x"
+    {
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
     }
-  }
+  ]
 }
