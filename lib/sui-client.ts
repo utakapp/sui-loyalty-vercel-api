@@ -204,21 +204,32 @@ export class SuiLoyaltyClient {
    * Extract badge ID from transaction result
    */
   private extractBadgeId(result: any): string | null {
+    console.log('Extracting badge ID from result:', JSON.stringify(result, null, 2));
+
     if (!result.objectChanges) {
+      console.log('No objectChanges found');
       return null;
     }
 
-    // Find created Badge object
+    console.log('Object changes:', JSON.stringify(result.objectChanges, null, 2));
+
+    // Find created Badge object - try multiple patterns
     for (const change of result.objectChanges) {
-      if (
-        change.type === 'created' &&
-        change.objectType &&
-        change.objectType.includes('::online_course_loyalty::Badge')
-      ) {
-        return change.objectId;
+      console.log('Checking change:', change.type, change.objectType);
+
+      if (change.type === 'created') {
+        // Try to match Badge in various ways
+        if (change.objectType) {
+          const objectType = change.objectType.toLowerCase();
+          if (objectType.includes('badge') || objectType.includes('coursebadge')) {
+            console.log('Found badge:', change.objectId);
+            return change.objectId;
+          }
+        }
       }
     }
 
+    console.log('No badge found in objectChanges');
     return null;
   }
 
