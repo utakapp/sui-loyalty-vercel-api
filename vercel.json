@@ -11,12 +11,5 @@
       "src": "/api/(.*)",
       "dest": "/api/$1"
     }
-  ],
-  "env": {
-    "SUI_NETWORK": "@sui_network",
-    "SUI_PRIVATE_KEY": "@sui_private_key",
-    "PACKAGE_ID": "@package_id",
-    "ADMIN_CAP_ID": "@admin_cap_id",
-    "API_SECRET_KEY": "@api_secret_key"
-  }
+  ]
 }
